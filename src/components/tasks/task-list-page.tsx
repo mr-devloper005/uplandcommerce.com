@@ -25,18 +25,18 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 const variantShells = {
-  'listing-directory': 'bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.08),transparent_24%),linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]',
-  'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#f4f9ff_100%)]',
-  'article-editorial': 'bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_20%),linear-gradient(180deg,#fff8ef_0%,#ffffff_100%)]',
-  'article-journal': 'bg-[linear-gradient(180deg,#fffdf9_0%,#f7f1ea_100%)]',
-  'image-masonry': 'bg-[linear-gradient(180deg,#09101d_0%,#111c2f_100%)] text-white',
-  'image-portfolio': 'bg-[linear-gradient(180deg,#07111f_0%,#13203a_100%)] text-white',
+  'listing-directory': 'bg-[radial-gradient(circle_at_top_left,rgba(94,233,176,0.1),transparent_26%),linear-gradient(180deg,#e8f2ed_0%,#f9faf9_45%,#ffffff_100%)]',
+  'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#eef6f2_100%)]',
+  'article-editorial': 'bg-[linear-gradient(180deg,#f6faf8_0%,#ffffff_100%)]',
+  'article-journal': 'bg-[linear-gradient(180deg,#eef6f2_0%,#ffffff_100%)]',
+  'image-masonry': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)] text-[#132722]',
+  'image-portfolio': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)] text-[#132722]',
   'profile-creator': 'bg-[linear-gradient(180deg,#0a1120_0%,#101c34_100%)] text-white',
-  'profile-business': 'bg-[linear-gradient(180deg,#f6fbff_0%,#ffffff_100%)]',
-  'classified-bulletin': 'bg-[linear-gradient(180deg,#edf3e4_0%,#ffffff_100%)]',
-  'classified-market': 'bg-[linear-gradient(180deg,#f4f6ef_0%,#ffffff_100%)]',
-  'sbm-curation': 'bg-[linear-gradient(180deg,#fff7ee_0%,#ffffff_100%)]',
-  'sbm-library': 'bg-[linear-gradient(180deg,#f7f8fc_0%,#ffffff_100%)]',
+  'profile-business': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#ffffff_100%)]',
+  'classified-bulletin': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)]',
+  'classified-market': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)]',
+  'sbm-curation': 'bg-[linear-gradient(180deg,#f0f7f4_0%,#ffffff_100%)]',
+  'sbm-library': 'bg-[linear-gradient(180deg,#eef6f2_0%,#ffffff_100%)]',
 } as const
 
 export async function TaskListPage({ task, category }: { task: TaskKey; category?: string }) {
@@ -60,7 +60,7 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
 
-  const isDark = ['image-masonry', 'image-portfolio', 'profile-creator'].includes(layoutKey)
+  const isDark = ['profile-creator'].includes(layoutKey)
   const ui = isDark
     ? {
         muted: 'text-slate-300',
@@ -69,21 +69,29 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
         input: 'border-white/10 bg-white/6 text-white',
         button: 'bg-white text-slate-950 hover:bg-slate-200',
       }
-    : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
+    : layoutKey.startsWith('classified')
       ? {
-          muted: 'text-[#72594a]',
-          panel: 'border border-[#dbc6b6] bg-white/90',
-          soft: 'border border-[#dbc6b6] bg-[#fff8ef]',
-          input: 'border border-[#dbc6b6] bg-white text-[#2f1d16]',
-          button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
+          muted: 'text-[#3d5a52]',
+          panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+          soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+          input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+          button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
         }
-      : {
-          muted: 'text-slate-600',
-          panel: 'border border-slate-200 bg-white',
-          soft: 'border border-slate-200 bg-slate-50',
-          input: 'border border-slate-200 bg-white text-slate-950',
-          button: 'bg-slate-950 text-white hover:bg-slate-800',
-        }
+      : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
+        ? {
+            muted: 'text-[#3d5a52]',
+            panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+            soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+            input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+            button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
+          }
+        : {
+            muted: 'text-[#3d5a52]',
+            panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+            soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+            input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+            button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
+          }
 
   return (
     <div className={`min-h-screen ${shellClass}`}>
@@ -173,10 +181,12 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           <section className="mb-12 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
               <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${ui.soft}`}>
-                <Icon className="h-3.5 w-3.5" /> Visual feed
+                <Icon className="h-3.5 w-3.5" /> Gallery
               </div>
-              <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em]">{taskConfig?.description || 'Latest posts'}</h1>
-              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>This surface leans into stronger imagery, larger modules, and more expressive spacing so visual content feels materially different from reading and directory pages.</p>
+              <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em] text-[#0f241f]">{taskConfig?.description || 'Latest posts'}</h1>
+              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>
+                Browse image-led posts on the same mint-and-forest system as classifieds—big thumbnails, light chrome, and quick jumps into each shot.
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className={`min-h-[220px] rounded-[2rem] ${ui.panel}`} />

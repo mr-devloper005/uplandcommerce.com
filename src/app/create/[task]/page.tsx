@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
+import { Footer } from "@/components/shared/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -182,17 +183,18 @@ export default function CreateTaskPage() {
 
   if (!taskConfig || !formConfig) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="flex min-h-screen flex-col bg-[#f6faf8] text-[#132722]">
         <NavbarShell />
-        <main className="mx-auto max-w-3xl px-4 py-16 text-center">
-          <h1 className="text-2xl font-semibold text-foreground">Task not available</h1>
-          <p className="mt-2 text-muted-foreground">
+        <main className="mx-auto max-w-3xl flex-1 px-4 py-16 text-center">
+          <h1 className="text-2xl font-semibold text-[#0f241f]">Task not available</h1>
+          <p className="mt-2 text-[#3d5a52]">
             This task is not enabled for the current site.
           </p>
-          <Button className="mt-6" asChild>
+          <Button className="mt-6 rounded-full bg-[#1B4332] text-white hover:bg-[#2d5a47]" asChild>
             <Link href="/">Back home</Link>
           </Button>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -271,9 +273,9 @@ export default function CreateTaskPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#f6faf8] text-[#132722]">
       <NavbarShell />
-      <main className="mx-auto max-w-4xl px-4 py-12">
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:py-14">
         <div className="mb-8 flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/">
@@ -286,7 +288,7 @@ export default function CreateTaskPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <div className="rounded-[2rem] border border-[#c5ddd4] bg-white p-8 shadow-[0_24px_60px_rgba(15,42,35,0.1)]">
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">{taskConfig.label}</Badge>
             <Badge variant="outline">Local-only</Badge>
@@ -304,13 +306,13 @@ export default function CreateTaskPage() {
                     placeholder={field.placeholder}
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="border-2 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className="border-2 border-[#c5ddd4] bg-white focus-visible:ring-2 focus-visible:ring-[#1B4332]/25"
                   />
                 ) : field.type === "category" ? (
                   <select
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="h-11 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className="h-11 rounded-lg border-2 border-[#c5ddd4] bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4332]/25"
                   >
                     <option value="">Select category</option>
                     {CATEGORY_OPTIONS.map((option) => (
@@ -368,7 +370,7 @@ export default function CreateTaskPage() {
                     }
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="h-11 border-2 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className="h-11 border-2 border-[#c5ddd4] bg-white focus-visible:ring-2 focus-visible:ring-[#1B4332]/25"
                   />
                 )}
               </div>
@@ -389,6 +391,7 @@ export default function CreateTaskPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

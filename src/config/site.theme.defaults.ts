@@ -1,5 +1,5 @@
 export type SiteShell = 'directory' | 'editorial' | 'studio' | 'market'
-export type HeroVariant = 'search-first' | 'spotlight-split' | 'gallery-mosaic' | 'catalog-promo'
+export type HeroVariant = 'search-first' | 'spotlight-split' | 'gallery-mosaic' | 'catalog-promo' | 'forest-market'
 export type HomeLayout = 'directory-stack' | 'editorial-rhythm' | 'studio-showcase' | 'market-catalog'
 export type NavigationVariant = 'compact' | 'editorial' | 'capsule' | 'minimal'
 export type FooterVariant = 'columns' | 'editorial' | 'dense' | 'minimal'
