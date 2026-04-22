@@ -1,33 +1,33 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { FileText, Building2, Tag, Users } from 'lucide-react'
+import { Image as ImageIcon, Tag, Users, ShieldCheck } from 'lucide-react'
 
 const stats = [
   {
-    icon: FileText,
-    value: '25K+',
-    label: 'Articles Published',
-    description: 'Quality content created by our community'
-  },
-  {
-    icon: Building2,
-    value: '12K+',
-    label: 'Business Listings',
-    description: 'Verified businesses and services'
-  },
-  {
     icon: Tag,
     value: '50K+',
-    label: 'Classified Ads',
-    description: 'Items listed and sold'
+    label: 'Classified posts',
+    description: 'Deals, jobs, and offers circulating locally',
+  },
+  {
+    icon: ImageIcon,
+    value: '120K+',
+    label: 'Gallery uploads',
+    description: 'Photos and visual stories shared on the feed',
   },
   {
     icon: Users,
     value: '100K+',
-    label: 'Active Users',
-    description: 'Growing community members'
-  }
+    label: 'Active members',
+    description: 'People buying, selling, and sharing shots',
+  },
+  {
+    icon: ShieldCheck,
+    value: '24/7',
+    label: 'Human moderation',
+    description: 'Report flows keep lanes trustworthy',
+  },
 ]
 
 export function StatsSection() {
@@ -36,10 +36,10 @@ export function StatsSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-            Platform in Numbers
+            {'Marketplace & gallery in motion'}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Join our thriving community of creators and businesses
+            Two lanes—classifieds and image sharing—without the clutter of other formats
           </p>
         </div>
 

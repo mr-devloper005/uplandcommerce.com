@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Bookmark, Building2, FileText, Image as ImageIcon, Sparkles } from 'lucide-react'
+import { LoginForm } from '@/components/auth/login-form'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { getFactoryState } from '@/design/factory/get-factory-state'
@@ -9,14 +10,14 @@ import { LOGIN_PAGE_OVERRIDE_ENABLED, LoginPageOverride } from '@/overrides/logi
 function getLoginConfig(kind: ReturnType<typeof getProductKind>) {
   if (kind === 'directory') {
     return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      side: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
+      shell: 'bg-[#f6faf8] text-[#132722]',
+      panel: 'border border-[#c5ddd4] bg-white shadow-[0_20px_50px_rgba(15,42,35,0.08)]',
+      side: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+      muted: 'text-[#3d5a52]',
+      action: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
       icon: Building2,
-      title: 'Access your business dashboard',
-      body: 'Manage listings, verification details, contact info, and local discovery surfaces from one place.',
+      title: 'Sign in to manage your classifieds and gallery',
+      body: 'Post local deals, upload shots, and keep everything organized in one marketplace-style workspace.',
     }
   }
   if (kind === 'editorial') {
@@ -33,14 +34,14 @@ function getLoginConfig(kind: ReturnType<typeof getProductKind>) {
   }
   if (kind === 'visual') {
     return {
-      shell: 'bg-[#07101f] text-white',
-      panel: 'border border-white/10 bg-white/6',
-      side: 'border border-white/10 bg-white/5',
-      muted: 'text-slate-300',
-      action: 'bg-[#8df0c8] text-[#07111f] hover:bg-[#77dfb8]',
+      shell: 'bg-[linear-gradient(180deg,#0f241f_0%,#1B4332_45%,#0f241f_100%)] text-white',
+      panel: 'border border-white/12 bg-white/8 backdrop-blur-sm',
+      side: 'border border-white/12 bg-white/6 backdrop-blur-sm',
+      muted: 'text-emerald-100/85',
+      action: 'bg-[#5ee9b0] text-[#0a1f1a] hover:bg-[#4ad9a0]',
       icon: ImageIcon,
-      title: 'Enter the creator workspace',
-      body: 'Open your visual feed, creator profile, and publishing tools without dropping into a generic admin shell.',
+      title: 'Sign in to post classifieds and gallery shots',
+      body: 'Browse deals, share images, and manage your posts from one calm workspace. Your login stays on this device until you sign out.',
     }
   }
   return {
@@ -75,7 +76,7 @@ export default function LoginPage() {
             <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">{config.title}</h1>
             <p className={`mt-5 text-sm leading-8 ${config.muted}`}>{config.body}</p>
             <div className="mt-8 grid gap-4">
-              {['Cleaner product-specific workflows', 'Palette and layout matched to the site family', 'Fewer repeated admin patterns'].map((item) => (
+              {['Forest green UI tuned for scanning prices fast', 'Gallery lane keeps imagery immersive, not boxed in', 'Session saved locally until you sign out'].map((item) => (
                 <div key={item} className="rounded-[1.5rem] border border-current/10 px-4 py-4 text-sm">{item}</div>
               ))}
             </div>
@@ -83,11 +84,7 @@ export default function LoginPage() {
 
           <div className={`rounded-[2rem] p-8 ${config.panel}`}>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Welcome back</p>
-            <form className="mt-6 grid gap-4">
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Password" type="password" />
-              <button type="submit" className={`inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${config.action}`}>Sign in</button>
-            </form>
+            <LoginForm actionClassName={config.action} mutedClassName={config.muted} />
             <div className={`mt-6 flex items-center justify-between text-sm ${config.muted}`}>
               <Link href="/forgot-password" className="hover:underline">Forgot password?</Link>
               <Link href="/register" className="inline-flex items-center gap-2 font-semibold hover:underline">
