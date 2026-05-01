@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Tag, User } from 'lucide-react'
+import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { TaskListClient } from '@/components/tasks/task-list-client'
@@ -39,6 +40,23 @@ const variantShells = {
   'sbm-library': 'bg-[linear-gradient(180deg,#eef6f2_0%,#ffffff_100%)]',
 } as const
 
+const getPostImageUrl = (post: any) => {
+  const media = Array.isArray(post?.media) ? post.media : []
+  const mediaUrl = media.find((item: any) => typeof item?.url === 'string' && item.url)?.url
+  if (mediaUrl) return mediaUrl as string
+
+  const content = post?.content && typeof post.content === 'object' ? post.content : {}
+  const image = typeof (content as any).image === 'string' ? (content as any).image : null
+  if (image) return image
+  const images = Array.isArray((content as any).images) ? (content as any).images : []
+  const firstImage = images.find((value: unknown) => typeof value === 'string' && value)
+  if (firstImage) return firstImage as string
+  const logo = typeof (content as any).logo === 'string' ? (content as any).logo : null
+  if (logo) return logo
+
+  return '/placeholder.svg?height=900&width=1400'
+}
+
 export async function TaskListPage({ task, category }: { task: TaskKey; category?: string }) {
   if (TASK_LIST_PAGE_OVERRIDE_ENABLED) {
     return await TaskListPageOverride({ task, category })
@@ -59,6 +77,15 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const layoutKey = recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
+  const heroImagePosts = (
+    normalizedCategory === 'all'
+      ? posts
+      : posts.filter((post) => {
+          const content = post.content && typeof post.content === 'object' ? post.content : {}
+          const value = typeof (content as any).category === 'string' ? normalizeCategory((content as any).category) : ''
+          return value === normalizedCategory
+        })
+  ).slice(0, 3)
 
   const isDark = ['profile-creator'].includes(layoutKey)
   const ui = isDark
@@ -185,13 +212,57 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
               </div>
               <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em] text-[#0f241f]">{taskConfig?.description || 'Latest posts'}</h1>
               <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>
-                Browse image-led posts on the same mint-and-forest system as classifieds—big thumbnails, light chrome, and quick jumps into each shot.
+                Browse image-led posts with large previews and faster jumps by topic.
               </p>
+              <form className="mt-6 flex flex-wrap items-center gap-3" action={taskConfig?.route || '#'}>
+                <select name="category" defaultValue={normalizedCategory} className={`h-11 min-w-[220px] rounded-xl px-3 text-sm ${ui.input}`}>
+                  <option value="all">All categories</option>
+                  {CATEGORY_OPTIONS.map((item) => (
+                    <option key={item.slug} value={item.slug}>{item.name}</option>
+                  ))}
+                </select>
+                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply filter</button>
+                {normalizedCategory !== 'all' ? (
+                  <Link href={taskConfig?.route || '#'} className={`inline-flex h-11 items-center rounded-xl px-4 text-sm font-medium ${ui.soft}`}>
+                    Clear
+                  </Link>
+                ) : null}
+              </form>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.panel}`} />
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.soft}`} />
-              <div className={`col-span-2 min-h-[120px] rounded-[2rem] ${ui.panel}`} />
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.panel}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[0])}
+                  alt={heroImagePosts[0]?.title || 'Latest gallery post image'}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 420px"
+                  className="object-cover"
+                  intrinsicWidth={900}
+                  intrinsicHeight={700}
+                />
+              </div>
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.soft}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[1] || heroImagePosts[0])}
+                  alt={heroImagePosts[1]?.title || heroImagePosts[0]?.title || 'Gallery preview image'}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 420px"
+                  className="object-cover"
+                  intrinsicWidth={900}
+                  intrinsicHeight={700}
+                />
+              </div>
+              <div className={`relative col-span-2 min-h-[120px] overflow-hidden rounded-[2rem] ${ui.panel}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[2] || heroImagePosts[1] || heroImagePosts[0])}
+                  alt={heroImagePosts[2]?.title || heroImagePosts[1]?.title || heroImagePosts[0]?.title || 'Gallery strip image'}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 860px"
+                  className="object-cover"
+                  intrinsicWidth={1400}
+                  intrinsicHeight={520}
+                />
+              </div>
             </div>
           </section>
         ) : null}
@@ -208,12 +279,25 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
             </div>
           </section>
         ) : null}
-
         {layoutKey === 'classified-bulletin' || layoutKey === 'classified-market' ? (
           <section className="mb-12 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div className={`rounded-[1.8rem] p-6 ${ui.panel}`}>
               <p className={`text-xs uppercase tracking-[0.3em] ${ui.muted}`}>{taskConfig?.label || task}</p>
               <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-foreground">Fast-moving notices, offers, and responses in a compact board format.</h1>
+              <form className="mt-6 flex flex-wrap items-center gap-3" action={taskConfig?.route || '#'}>
+                <select name="category" defaultValue={normalizedCategory} className={`h-11 min-w-[220px] rounded-xl px-3 text-sm ${ui.input}`}>
+                  <option value="all">All categories</option>
+                  {CATEGORY_OPTIONS.map((item) => (
+                    <option key={item.slug} value={item.slug}>{item.name}</option>
+                  ))}
+                </select>
+                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply filter</button>
+                {normalizedCategory !== 'all' ? (
+                  <Link href={taskConfig?.route || '#'} className={`inline-flex h-11 items-center rounded-xl px-4 text-sm font-medium ${ui.soft}`}>
+                    Clear
+                  </Link>
+                ) : null}
+              </form>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {['Quick to scan', 'Shorter response path', 'Clearer urgency cues'].map((item) => (
@@ -267,3 +351,5 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
     </div>
   )
 }
+
+
