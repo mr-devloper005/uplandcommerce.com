@@ -7,6 +7,7 @@ import { buildPostUrl, getPostTaskKey } from "@/lib/task-data";
 import { getMockPostsForTask } from "@/lib/mock-posts";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { TaskPostCard } from "@/components/shared/task-post-card";
+import Link from "next/link";
 
 export const revalidate = 3;
 
@@ -72,14 +73,14 @@ export default async function SearchPage({
 
   return (
     <PageShell
-      title="Search"
+      title="Browse"
       description={
         query
           ? `Results for "${query}"`
-          : "Browse the latest posts across every task."
+          : "Use one search box for deals and gallery posts."
       }
       actions={
-        <form action="/search" className="flex w-full gap-2 sm:w-auto">
+        <form action="/search" className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
           <input type="hidden" name="master" value="1" />
           {category ? <input type="hidden" name="category" value={category} /> : null}
           {task ? <input type="hidden" name="task" value={task} /> : null}
@@ -88,16 +89,44 @@ export default async function SearchPage({
             <Input
               name="q"
               defaultValue={query}
-              placeholder="Search across tasks..."
+              placeholder="Search classifieds and gallery…"
               className="h-11 pl-9"
             />
           </div>
-          <Button type="submit" className="h-11">
+          <Button type="submit" className="h-11 rounded-full bg-[#1B4332] text-white hover:bg-[#2d5a47]">
             Search
           </Button>
         </form>
       }
     >
+      <div className="mb-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="rounded-[2rem] border border-[#c5ddd4] bg-white p-6 shadow-[0_18px_52px_rgba(15,42,35,0.08)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#3d5a52]">Quick lanes</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link href="/classifieds" className="inline-flex items-center rounded-full border border-[#1B4332]/18 bg-[#e8f2ed] px-4 py-2 text-sm font-semibold text-[#1B4332] hover:bg-[#dff0e9]">
+              Browse classifieds
+            </Link>
+            <Link href="/images" className="inline-flex items-center rounded-full border border-[#1B4332]/18 bg-[#e8f2ed] px-4 py-2 text-sm font-semibold text-[#1B4332] hover:bg-[#dff0e9]">
+              Open gallery
+            </Link>
+            <Link href="/create/classified" className="inline-flex items-center rounded-full border border-[#1B4332]/18 bg-white px-4 py-2 text-sm font-semibold text-[#1B4332] hover:bg-[#e8f2ed]">
+              Post an ad
+            </Link>
+            <Link href="/create/image" className="inline-flex items-center rounded-full border border-[#1B4332]/18 bg-white px-4 py-2 text-sm font-semibold text-[#1B4332] hover:bg-[#e8f2ed]">
+              Upload a post
+            </Link>
+          </div>
+        </div>
+        <div className="rounded-[2rem] border border-[#c5ddd4] bg-white p-6 shadow-[0_18px_52px_rgba(15,42,35,0.08)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#3d5a52]">Search tips</p>
+          <ul className="mt-4 space-y-2 text-sm text-[#3d5a52]">
+            <li>Try category words: “camera”, “apartment”, “bike”, “job”.</li>
+            <li>Use location text when present: “downtown”, “north side”.</li>
+            <li>Short queries work best for scanning: 1–3 keywords.</li>
+          </ul>
+        </div>
+      </div>
+
       {results.length ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((post) => {
@@ -107,8 +136,8 @@ export default async function SearchPage({
           })}
         </div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
-          No matching posts yet.
+        <div className="rounded-[2rem] border border-dashed border-[#c5ddd4] bg-white p-10 text-center text-[#3d5a52]">
+          No matching posts yet. Try browsing <Link className="font-semibold text-[#1B4332] hover:underline" href="/classifieds">Classifieds</Link> or the <Link className="font-semibold text-[#1B4332] hover:underline" href="/images">Gallery</Link>.
         </div>
       )}
     </PageShell>

@@ -9,11 +9,11 @@ import { CONTACT_PAGE_OVERRIDE_ENABLED, ContactPageOverride } from '@/overrides/
 function getTone(kind: ReturnType<typeof getProductKind>) {
   if (kind === 'directory') {
     return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      soft: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
+      shell: 'bg-[#f6faf8] text-[#132722]',
+      panel: 'border border-[#c5ddd4] bg-white shadow-[0_20px_50px_rgba(15,42,35,0.08)]',
+      soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+      muted: 'text-[#3d5a52]',
+      action: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
     }
   }
   if (kind === 'editorial') {
@@ -27,11 +27,11 @@ function getTone(kind: ReturnType<typeof getProductKind>) {
   }
   if (kind === 'visual') {
     return {
-      shell: 'bg-[#07101f] text-white',
-      panel: 'border border-white/10 bg-white/6',
-      soft: 'border border-white/10 bg-white/5',
-      muted: 'text-slate-300',
-      action: 'bg-[#8df0c8] text-[#07111f] hover:bg-[#77dfb8]',
+      shell: 'bg-[linear-gradient(180deg,#0f241f_0%,#1B4332_45%,#0f241f_100%)] text-white',
+      panel: 'border border-white/12 bg-white/8 backdrop-blur-sm',
+      soft: 'border border-white/12 bg-white/6 backdrop-blur-sm',
+      muted: 'text-emerald-100/85',
+      action: 'bg-[#5ee9b0] text-[#0a1f1a] hover:bg-[#4ad9a0]',
     }
   }
   return {
@@ -48,15 +48,28 @@ export default function ContactPage() {
     return <ContactPageOverride />
   }
 
+  const rawEmails =
+    process.env.CONTACT_EMAILS ||
+    process.env.CONTACT_EMAIL ||
+    process.env.NEXT_PUBLIC_CONTACT_EMAILS ||
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
+    ''
+  const fallbackEmailDomain = process.env.NEXT_PUBLIC_SITE_DOMAIN?.trim() || ''
+  const fallbackEmail = fallbackEmailDomain ? `support@${fallbackEmailDomain}` : ''
+  const contactEmails = (rawEmails || fallbackEmail)
+    .split(/[,;\n]/g)
+    .map((value) => value.trim())
+    .filter(Boolean)
+
   const { recipe } = getFactoryState()
   const productKind = getProductKind(recipe)
   const tone = getTone(productKind)
   const lanes =
     productKind === 'directory'
       ? [
-          { icon: Building2, title: 'Business onboarding', body: 'Add listings, verify operational details, and bring your business surface live quickly.' },
-          { icon: Phone, title: 'Partnership support', body: 'Talk through bulk publishing, local growth, and operational setup questions.' },
-          { icon: MapPin, title: 'Coverage requests', body: 'Need a new geography or category lane? We can shape the directory around it.' },
+          { icon: Building2, title: 'Classifieds support', body: 'Help with posting ads, pricing, categories, and keeping your offers easy to scan.' },
+          { icon: Phone, title: 'Gallery & media', body: 'Questions about uploads, image quality, or how gallery posts appear in the feed.' },
+          { icon: MapPin, title: 'Local & trust', body: 'Coverage, verification cues, and keeping the marketplace useful for your area.' },
         ]
       : productKind === 'editorial'
         ? [
@@ -98,6 +111,25 @@ export default function ContactPage() {
 
           <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
             <h2 className="text-2xl font-semibold">Send a message</h2>
+            {contactEmails.length ? (
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <a
+                  href={`mailto:${contactEmails[0]}`}
+                  className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold ${tone.action}`}
+                >
+                  Email us
+                </a>
+                {contactEmails.slice(0, 3).map((email) => (
+                  <a
+                    key={email}
+                    href={`mailto:${email}`}
+                    className="inline-flex h-11 items-center justify-center rounded-full border border-current/15 bg-white/0 px-5 text-sm font-semibold"
+                  >
+                    {email}
+                  </a>
+                ))}
+              </div>
+            ) : null}
             <form className="mt-6 grid gap-4">
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Your name" />
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />

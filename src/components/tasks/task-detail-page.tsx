@@ -1,7 +1,7 @@
 import { ContentImage } from "@/components/shared/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, Globe, Phone, Tag, Mail } from "lucide-react";
+import { MapPin, Globe, Phone, Tag, Mail, CalendarDays } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
 import { Footer } from "@/components/shared/footer";
 import { TaskPostCard } from "@/components/shared/task-post-card";
@@ -143,6 +143,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   const content = getContent(post);
   const isClassified = task === "classified";
   const isArticle = task === "article";
+  const isImageTask = task === "image";
   const category = content.category || post.tags?.[0] || taskConfig?.label || task;
   const description = content.description || post.summary || "Details coming soon.";
   const descriptionHtml = !isArticle ? formatRichHtml(description, "Details coming soon.") : "";
@@ -162,12 +163,19 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
         day: "numeric",
       })
     : "";
+  const publishedLabel = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "";
   const postTags = Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [];
   const location = content.address || content.location;
   const images = getImageUrls(post, content);
   const mapEmbedUrl = buildMapEmbedUrl(content.latitude, content.longitude, location);
   const isBookmark = task === "sbm" || task === "social";
-  const hideSidebar = isClassified || isArticle || task === "image" || isBookmark;
+  const hideSidebar = isClassified || isArticle || isImageTask || isBookmark;
   const related = (await fetchTaskPosts(task, 6))
     .filter((item) => item.slug !== post.slug)
     .filter((item) => {
@@ -229,7 +237,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
 
   if (productKind === "directory" && (task === "listing" || task === "classified" || task === "profile")) {
     return (
-      <div className="min-h-screen bg-[#f8fbff]">
+      <div className="min-h-screen bg-[#f6faf8] text-[#132722]">
         <NavbarShell />
         <DirectoryTaskDetailPage
           task={task}
@@ -248,7 +256,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#f6faf8] text-[#132722]">
       <NavbarShell />
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <SchemaJsonLd data={schemaPayload} />
@@ -310,13 +318,183 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
 
             {!isArticle ? (
               <>
-                {!isBookmark ? (
+                {isImageTask ? (
+                  <div className="overflow-hidden rounded-[2rem] border border-[#c9d8ea] bg-[#0b1220] shadow-[0_24px_70px_-38px_rgba(11,18,32,0.85)]">
+                    <div className="relative">
+                      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#0b1220] via-[#0b1220]/30 to-transparent" />
+                      <TaskImageCarousel images={images} />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-6 sm:p-8">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#d4e4ff]">
+                          {category}
+                        </p>
+                        <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
+                          {post.title}
+                        </h1>
+                        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[#d6e0f4]">
+                          {publishedLabel ? (
+                            <span className="inline-flex items-center gap-1">
+                              <CalendarDays className="h-4 w-4" />
+                              {publishedLabel}
+                            </span>
+                          ) : null}
+                          {location ? (
+                            <span className="inline-flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {location}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-0 border-t border-[#24364f] bg-[#eef4ff] md:grid-cols-[1.2fr_0.8fr]">
+                      <div className="p-6 sm:p-8">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3f5f86]">
+                          Story details
+                        </p>
+                        <RichContent
+                          html={descriptionHtml}
+                          className="mt-3 text-[15px] leading-7 text-[#11263f]"
+                        />
+                      </div>
+                      <div className="border-t border-[#c9d8ea] p-6 text-sm text-[#1b3555] md:border-l md:border-t-0">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3f5f86]">
+                          Snapshot
+                        </p>
+                        <div className="mt-4 space-y-3">
+                          <div className="rounded-xl border border-[#bfd2eb] bg-white p-3">
+                            <p className="text-xs uppercase tracking-[0.15em] text-[#5a7497]">Gallery items</p>
+                            <p className="mt-1 text-2xl font-semibold text-[#0d2540]">{images.length}</p>
+                          </div>
+                          {content.website ? (
+                            <div className="flex items-start gap-2">
+                              <Globe className="mt-0.5 h-4 w-4" />
+                              <a
+                                href={content.website}
+                                className="break-all text-[#0d2540] hover:underline"
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {content.website}
+                              </a>
+                            </div>
+                          ) : null}
+                          {content.email ? (
+                            <div className="flex items-start gap-2">
+                              <Mail className="mt-0.5 h-4 w-4" />
+                              <a
+                                href={`mailto:${content.email}`}
+                                className="break-all text-[#0d2540] hover:underline"
+                              >
+                                {content.email}
+                              </a>
+                            </div>
+                          ) : null}
+                          {postTags.length ? (
+                            <div className="flex flex-wrap gap-2 pt-2">
+                              {postTags.slice(0, 6).map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
+                                  className="border-[#9ab7da] bg-[#e5efff] text-[#20466f]"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {isClassified ? (
+                  <div className="overflow-hidden rounded-[2rem] border border-border bg-card">
+                    <div className="grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
+                      <div className="h-full">
+                        <TaskImageCarousel images={images} />
+                      </div>
+                      <div className="flex flex-col border-t border-border p-6 lg:max-h-[38rem] lg:border-l lg:border-t-0 lg:overflow-y-auto">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="secondary" className="inline-flex items-center gap-1">
+                            <Tag className="h-3.5 w-3.5" />
+                            {category}
+                          </Badge>
+                          {publishedLabel ? (
+                            <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                              <CalendarDays className="h-4 w-4" />
+                              {publishedLabel}
+                            </span>
+                          ) : null}
+                          {location ? (
+                            <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                              <MapPin className="h-4 w-4" />
+                              {location}
+                            </span>
+                          ) : null}
+                        </div>
+                        <h1 className="mt-4 text-3xl font-semibold leading-tight text-foreground">
+                          {post.title}
+                        </h1>
+                        <RichContent html={descriptionHtml} className="mt-4" />
+
+                        <div className="mt-6 space-y-3 border-t border-border pt-5 text-sm text-muted-foreground">
+                          {content.website && (
+                            <div className="flex items-start gap-2">
+                              <Globe className="mt-0.5 h-4 w-4" />
+                              <a
+                                href={content.website}
+                                className="break-all text-foreground hover:underline"
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {content.website}
+                              </a>
+                            </div>
+                          )}
+                          {content.phone && (
+                            <div className="flex items-start gap-2">
+                              <Phone className="mt-0.5 h-4 w-4" />
+                              <span>{content.phone}</span>
+                            </div>
+                          )}
+                          {content.email && (
+                            <div className="flex items-start gap-2">
+                              <Mail className="mt-0.5 h-4 w-4" />
+                              <a
+                                href={`mailto:${content.email}`}
+                                className="break-all text-foreground hover:underline"
+                              >
+                                {content.email}
+                              </a>
+                            </div>
+                          )}
+                        </div>
+
+                        {mapEmbedUrl ? (
+                          <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                            <iframe
+                              title="Business location map"
+                              src={mapEmbedUrl}
+                              className="h-48 w-full"
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {!isBookmark && !isClassified && !isImageTask ? (
                   <div className={cn(isClassified ? "w-full" : "")}>
                     <TaskImageCarousel images={images} />
                   </div>
                 ) : null}
 
-                <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
+                {!isClassified && !isImageTask ? (
+                  <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
                   <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                     <Badge variant="secondary" className="inline-flex items-center gap-1">
                       <Tag className="h-3.5 w-3.5" />
@@ -331,52 +509,9 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                   </div>
                   <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
                   <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
-                </div>
+                  </div>
+                ) : null}
               </>
-            ) : null}
-
-            {isClassified ? (
-              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground">Business details</h2>
-                <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                  {content.website && (
-                    <div className="flex items-start gap-2">
-                      <Globe className="mt-0.5 h-4 w-4" />
-                      <a
-                        href={content.website}
-                        className="break-all text-foreground hover:underline"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {content.website}
-                      </a>
-                    </div>
-                  )}
-                  {content.phone && (
-                    <div className="flex items-start gap-2">
-                      <Phone className="mt-0.5 h-4 w-4" />
-                      <span>{content.phone}</span>
-                    </div>
-                  )}
-                  {content.email && (
-                    <div className="flex items-start gap-2">
-                      <Mail className="mt-0.5 h-4 w-4" />
-                      <a
-                        href={`mailto:${content.email}`}
-                        className="break-all text-foreground hover:underline"
-                      >
-                        {content.email}
-                      </a>
-                    </div>
-                  )}
-                  {location && (
-                    <div className="flex items-start gap-2">
-                      <MapPin className="mt-0.5 h-4 w-4" />
-                      <span>{location}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
             ) : null}
 
             {content.highlights?.length && !isArticle ? (
@@ -387,20 +522,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                     <li key={item}>• {item}</li>
                   ))}
                 </ul>
-              </div>
-            ) : null}
-
-            {isClassified && mapEmbedUrl ? (
-              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-4">
-                <p className="text-sm font-semibold text-foreground">Location map</p>
-                <div className="mt-4 overflow-hidden rounded-xl border border-border">
-                  <iframe
-                    title="Business location map"
-                    src={mapEmbedUrl}
-                    className="h-56 w-full"
-                    loading="lazy"
-                  />
-                </div>
               </div>
             ) : null}
 

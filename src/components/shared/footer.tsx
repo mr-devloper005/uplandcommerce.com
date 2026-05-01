@@ -46,9 +46,9 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-  { name: 'GitHub', href: 'https://github.com', icon: Github },
-  { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
+  { name: 'Twitter', href: '/', icon: Twitter },
+  { name: 'GitHub', href: '/', icon: Github },
+  { name: 'LinkedIn', href: '/', icon: Linkedin },
 ]
 
 export function Footer() {
@@ -82,22 +82,22 @@ export function Footer() {
 
   if (recipe.footer === 'dense-footer') {
     return (
-      <footer className="border-t border-white/10 bg-[linear-gradient(180deg,#07111f_0%,#0b1a2e_100%)] text-white">
+      <footer className="border-t border-white/10 bg-[linear-gradient(180deg,#0f241f_0%,#1B4332_48%,#0f2a24_100%)] text-white">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr_1fr]">
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
+            <div className="rounded-[2rem] border border-white/12 bg-white/6 p-7 backdrop-blur-sm">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/12 bg-white/8 p-1.5">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/14 bg-white/10 p-1.5">
                   <img src="/favicon.png?v=20260401" alt={`${SITE_CONFIG.name} logo`} width="48" height="48" className="h-full w-full object-contain" />
                 </div>
                 <div>
                   <p className="text-lg font-semibold">{SITE_CONFIG.name}</p>
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{siteContent.footer.tagline}</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-emerald-100/70">{siteContent.footer.tagline}</p>
                 </div>
               </div>
-              <p className="mt-5 max-w-md text-sm leading-7 text-slate-300">{SITE_CONFIG.description}</p>
+              <p className="mt-5 max-w-md text-sm leading-7 text-emerald-50/85">{SITE_CONFIG.description}</p>
               {primaryTask ? (
-                <Link href={primaryTask.route} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#8df0c8] px-4 py-2.5 text-sm font-semibold text-[#07111f] hover:bg-[#77dfb8]">
+                <Link href={primaryTask.route} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#5ee9b0] px-4 py-2.5 text-sm font-semibold text-[#0a1f1a] shadow-[0_12px_32px_rgba(0,0,0,0.2)] hover:bg-[#4ad9a0]">
                   Explore {primaryTask.label}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -105,26 +105,26 @@ export function Footer() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Surfaces</h3>
-                <ul className="mt-4 space-y-3 text-sm text-slate-200">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100/65">Browse</h3>
+                <ul className="mt-4 space-y-3 text-sm text-emerald-50/90">
                   {footerLinks.platform.map((item: any) => (
                     <li key={item.name}><Link href={item.href} className="flex items-center gap-2 hover:text-white">{item.icon ? <item.icon className="h-4 w-4" /> : null}{item.name}</Link></li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Resources</h3>
-                <ul className="mt-4 space-y-3 text-sm text-slate-200">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100/65">Resources</h3>
+                <ul className="mt-4 space-y-3 text-sm text-emerald-50/90">
                   {footerLinks.resources.map((item) => (
                     <li key={item.name}><Link href={item.href} className="hover:text-white">{item.name}</Link></li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Connect</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100/65">Connect</h3>
                 <div className="mt-4 flex gap-3">
                   {socialLinks.map((item) => (
-                    <Link key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/8 p-2.5 text-slate-200 hover:bg-white/12 hover:text-white">
+                    <Link key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/12 bg-white/8 p-2.5 text-emerald-50/90 hover:bg-white/14 hover:text-white">
                       <item.icon className="h-4 w-4" />
                     </Link>
                   ))}
@@ -132,7 +132,7 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className="mt-10 border-t border-white/10 pt-5 text-sm text-slate-400">&copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.</div>
+          <div className="mt-10 border-t border-white/10 pt-5 text-sm text-emerald-100/55">&copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.</div>
         </div>
       </footer>
     )

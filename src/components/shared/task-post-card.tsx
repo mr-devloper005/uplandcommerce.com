@@ -68,16 +68,16 @@ const cardStyles = {
     badge: 'bg-[#2b1d17] text-[#fff3df]',
   },
   'studio-panel': {
-    frame: 'rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(7,17,31,0.96),rgba(12,23,43,0.96))] text-white shadow-[0_24px_80px_rgba(15,23,42,0.35)] hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(15,23,42,0.42)]',
-    muted: 'text-slate-300',
+    frame: 'rounded-[1.9rem] border border-white/12 bg-[linear-gradient(180deg,rgba(15,36,31,0.96),rgba(26,60,52,0.94))] text-white shadow-[0_24px_80px_rgba(8,24,20,0.38)] hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(8,24,20,0.45)]',
+    muted: 'text-emerald-100/80',
     title: 'text-white',
-    badge: 'bg-[#8df0c8] text-[#07111f]',
+    badge: 'bg-[#5ee9b0] text-[#0a1f1a]',
   },
   'catalog-grid': {
-    frame: 'rounded-[1.8rem] border border-[rgba(67,78,41,0.14)] bg-[#f8faf1] shadow-[0_18px_58px_rgba(55,65,31,0.1)] hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(55,65,31,0.14)]',
-    muted: 'text-[#5b664c]',
-    title: 'text-[#1f2617]',
-    badge: 'bg-[#1f2617] text-[#edf5dc]',
+    frame: 'rounded-[1.8rem] border border-[rgba(26,60,52,0.14)] bg-[#f4faf7] shadow-[0_18px_58px_rgba(15,42,35,0.1)] hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(15,42,35,0.14)]',
+    muted: 'text-[#3d5a52]',
+    title: 'text-[#0f241f]',
+    badge: 'bg-[#1B4332] text-white',
   },
 } as const
 

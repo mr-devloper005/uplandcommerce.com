@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Tag, User } from 'lucide-react'
+import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { TaskListClient } from '@/components/tasks/task-list-client'
@@ -25,19 +26,36 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 const variantShells = {
-  'listing-directory': 'bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.08),transparent_24%),linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]',
-  'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#f4f9ff_100%)]',
-  'article-editorial': 'bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_20%),linear-gradient(180deg,#fff8ef_0%,#ffffff_100%)]',
-  'article-journal': 'bg-[linear-gradient(180deg,#fffdf9_0%,#f7f1ea_100%)]',
-  'image-masonry': 'bg-[linear-gradient(180deg,#09101d_0%,#111c2f_100%)] text-white',
-  'image-portfolio': 'bg-[linear-gradient(180deg,#07111f_0%,#13203a_100%)] text-white',
+  'listing-directory': 'bg-[radial-gradient(circle_at_top_left,rgba(94,233,176,0.1),transparent_26%),linear-gradient(180deg,#e8f2ed_0%,#f9faf9_45%,#ffffff_100%)]',
+  'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#eef6f2_100%)]',
+  'article-editorial': 'bg-[linear-gradient(180deg,#f6faf8_0%,#ffffff_100%)]',
+  'article-journal': 'bg-[linear-gradient(180deg,#eef6f2_0%,#ffffff_100%)]',
+  'image-masonry': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)] text-[#132722]',
+  'image-portfolio': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)] text-[#132722]',
   'profile-creator': 'bg-[linear-gradient(180deg,#0a1120_0%,#101c34_100%)] text-white',
-  'profile-business': 'bg-[linear-gradient(180deg,#f6fbff_0%,#ffffff_100%)]',
-  'classified-bulletin': 'bg-[linear-gradient(180deg,#edf3e4_0%,#ffffff_100%)]',
-  'classified-market': 'bg-[linear-gradient(180deg,#f4f6ef_0%,#ffffff_100%)]',
-  'sbm-curation': 'bg-[linear-gradient(180deg,#fff7ee_0%,#ffffff_100%)]',
-  'sbm-library': 'bg-[linear-gradient(180deg,#f7f8fc_0%,#ffffff_100%)]',
+  'profile-business': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#ffffff_100%)]',
+  'classified-bulletin': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)]',
+  'classified-market': 'bg-[linear-gradient(180deg,#e8f2ed_0%,#f9faf9_50%,#ffffff_100%)]',
+  'sbm-curation': 'bg-[linear-gradient(180deg,#f0f7f4_0%,#ffffff_100%)]',
+  'sbm-library': 'bg-[linear-gradient(180deg,#eef6f2_0%,#ffffff_100%)]',
 } as const
+
+const getPostImageUrl = (post: any) => {
+  const media = Array.isArray(post?.media) ? post.media : []
+  const mediaUrl = media.find((item: any) => typeof item?.url === 'string' && item.url)?.url
+  if (mediaUrl) return mediaUrl as string
+
+  const content = post?.content && typeof post.content === 'object' ? post.content : {}
+  const image = typeof (content as any).image === 'string' ? (content as any).image : null
+  if (image) return image
+  const images = Array.isArray((content as any).images) ? (content as any).images : []
+  const firstImage = images.find((value: unknown) => typeof value === 'string' && value)
+  if (firstImage) return firstImage as string
+  const logo = typeof (content as any).logo === 'string' ? (content as any).logo : null
+  if (logo) return logo
+
+  return '/placeholder.svg?height=900&width=1400'
+}
 
 export async function TaskListPage({ task, category }: { task: TaskKey; category?: string }) {
   if (TASK_LIST_PAGE_OVERRIDE_ENABLED) {
@@ -59,8 +77,17 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const layoutKey = recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
+  const heroImagePosts = (
+    normalizedCategory === 'all'
+      ? posts
+      : posts.filter((post) => {
+          const content = post.content && typeof post.content === 'object' ? post.content : {}
+          const value = typeof (content as any).category === 'string' ? normalizeCategory((content as any).category) : ''
+          return value === normalizedCategory
+        })
+  ).slice(0, 3)
 
-  const isDark = ['image-masonry', 'image-portfolio', 'profile-creator'].includes(layoutKey)
+  const isDark = ['profile-creator'].includes(layoutKey)
   const ui = isDark
     ? {
         muted: 'text-slate-300',
@@ -69,21 +96,29 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
         input: 'border-white/10 bg-white/6 text-white',
         button: 'bg-white text-slate-950 hover:bg-slate-200',
       }
-    : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
+    : layoutKey.startsWith('classified')
       ? {
-          muted: 'text-[#72594a]',
-          panel: 'border border-[#dbc6b6] bg-white/90',
-          soft: 'border border-[#dbc6b6] bg-[#fff8ef]',
-          input: 'border border-[#dbc6b6] bg-white text-[#2f1d16]',
-          button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
+          muted: 'text-[#3d5a52]',
+          panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+          soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+          input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+          button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
         }
-      : {
-          muted: 'text-slate-600',
-          panel: 'border border-slate-200 bg-white',
-          soft: 'border border-slate-200 bg-slate-50',
-          input: 'border border-slate-200 bg-white text-slate-950',
-          button: 'bg-slate-950 text-white hover:bg-slate-800',
-        }
+      : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
+        ? {
+            muted: 'text-[#3d5a52]',
+            panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+            soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+            input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+            button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
+          }
+        : {
+            muted: 'text-[#3d5a52]',
+            panel: 'border border-[#c5ddd4] bg-white shadow-[0_18px_48px_rgba(15,42,35,0.08)]',
+            soft: 'border border-[#c5ddd4] bg-[#e8f2ed]',
+            input: 'border border-[#c5ddd4] bg-white text-[#0f241f]',
+            button: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
+          }
 
   return (
     <div className={`min-h-screen ${shellClass}`}>
@@ -173,15 +208,61 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           <section className="mb-12 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
               <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${ui.soft}`}>
-                <Icon className="h-3.5 w-3.5" /> Visual feed
+                <Icon className="h-3.5 w-3.5" /> Gallery
               </div>
-              <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em]">{taskConfig?.description || 'Latest posts'}</h1>
-              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>This surface leans into stronger imagery, larger modules, and more expressive spacing so visual content feels materially different from reading and directory pages.</p>
+              <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em] text-[#0f241f]">{taskConfig?.description || 'Latest posts'}</h1>
+              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>
+                Browse image-led posts with large previews and faster jumps by topic.
+              </p>
+              <form className="mt-6 flex flex-wrap items-center gap-3" action={taskConfig?.route || '#'}>
+                <select name="category" defaultValue={normalizedCategory} className={`h-11 min-w-[220px] rounded-xl px-3 text-sm ${ui.input}`}>
+                  <option value="all">All categories</option>
+                  {CATEGORY_OPTIONS.map((item) => (
+                    <option key={item.slug} value={item.slug}>{item.name}</option>
+                  ))}
+                </select>
+                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply filter</button>
+                {normalizedCategory !== 'all' ? (
+                  <Link href={taskConfig?.route || '#'} className={`inline-flex h-11 items-center rounded-xl px-4 text-sm font-medium ${ui.soft}`}>
+                    Clear
+                  </Link>
+                ) : null}
+              </form>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.panel}`} />
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.soft}`} />
-              <div className={`col-span-2 min-h-[120px] rounded-[2rem] ${ui.panel}`} />
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.panel}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[0])}
+                  alt={heroImagePosts[0]?.title || 'Latest gallery post image'}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 420px"
+                  className="object-cover"
+                  intrinsicWidth={900}
+                  intrinsicHeight={700}
+                />
+              </div>
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.soft}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[1] || heroImagePosts[0])}
+                  alt={heroImagePosts[1]?.title || heroImagePosts[0]?.title || 'Gallery preview image'}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 420px"
+                  className="object-cover"
+                  intrinsicWidth={900}
+                  intrinsicHeight={700}
+                />
+              </div>
+              <div className={`relative col-span-2 min-h-[120px] overflow-hidden rounded-[2rem] ${ui.panel}`}>
+                <ContentImage
+                  src={getPostImageUrl(heroImagePosts[2] || heroImagePosts[1] || heroImagePosts[0])}
+                  alt={heroImagePosts[2]?.title || heroImagePosts[1]?.title || heroImagePosts[0]?.title || 'Gallery strip image'}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 860px"
+                  className="object-cover"
+                  intrinsicWidth={1400}
+                  intrinsicHeight={520}
+                />
+              </div>
             </div>
           </section>
         ) : null}
@@ -198,12 +279,25 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
             </div>
           </section>
         ) : null}
-
         {layoutKey === 'classified-bulletin' || layoutKey === 'classified-market' ? (
           <section className="mb-12 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div className={`rounded-[1.8rem] p-6 ${ui.panel}`}>
               <p className={`text-xs uppercase tracking-[0.3em] ${ui.muted}`}>{taskConfig?.label || task}</p>
               <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-foreground">Fast-moving notices, offers, and responses in a compact board format.</h1>
+              <form className="mt-6 flex flex-wrap items-center gap-3" action={taskConfig?.route || '#'}>
+                <select name="category" defaultValue={normalizedCategory} className={`h-11 min-w-[220px] rounded-xl px-3 text-sm ${ui.input}`}>
+                  <option value="all">All categories</option>
+                  {CATEGORY_OPTIONS.map((item) => (
+                    <option key={item.slug} value={item.slug}>{item.name}</option>
+                  ))}
+                </select>
+                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply filter</button>
+                {normalizedCategory !== 'all' ? (
+                  <Link href={taskConfig?.route || '#'} className={`inline-flex h-11 items-center rounded-xl px-4 text-sm font-medium ${ui.soft}`}>
+                    Clear
+                  </Link>
+                ) : null}
+              </form>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {['Quick to scan', 'Shorter response path', 'Clearer urgency cues'].map((item) => (
@@ -257,3 +351,5 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
     </div>
   )
 }
+
+

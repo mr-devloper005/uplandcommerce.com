@@ -55,9 +55,9 @@ export function NoArticlesFound() {
   return (
     <EmptyState
       icon={FileText}
-      title="No articles found"
-      description="We couldn't find any articles matching your criteria. Try adjusting your filters or search terms."
-      action={{ label: 'Browse All Articles', href: '/articles' }}
+      title="Nothing matched"
+      description="Try broader keywords or browse live classifieds and gallery posts instead."
+      action={{ label: 'Browse classifieds', href: '/classifieds' }}
     />
   )
 }
@@ -66,9 +66,9 @@ export function NoListingsFound() {
   return (
     <EmptyState
       icon={Building2}
-      title="No listings found"
-      description="We couldn't find any listings matching your search. Try different filters or expand your search area."
-      action={{ label: 'Browse All Listings', href: '/listings' }}
+      title="Nothing matched"
+      description="Adjust your search or open the gallery for visual posts from the community."
+      action={{ label: 'Open gallery', href: '/images' }}
     />
   )
 }

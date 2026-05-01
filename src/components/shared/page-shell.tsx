@@ -16,23 +16,23 @@ export function PageShell({
   children?: ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#f6faf8] text-[#132722]">
       <NavbarShell />
       <main>
-        <section className="border-b border-border bg-secondary/30">
-          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <section className="border-b border-[#c5ddd4] bg-gradient-to-b from-white/95 to-[#eef6f2]/90 shadow-[inset_0_-1px_0_rgba(27,67,50,0.06)] backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-foreground">{title}</h1>
+                <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#0f241f] sm:text-4xl">{title}</h1>
                 {description && (
-                  <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#3d5a52] sm:text-base">{description}</p>
                 )}
               </div>
               {actions && <div className="flex flex-wrap gap-3">{actions}</div>}
             </div>
           </div>
         </section>
-        <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           {children}
         </section>
       </main>

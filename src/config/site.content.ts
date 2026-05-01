@@ -2,75 +2,75 @@ import type { TaskKey } from '@/lib/site-config'
 
 export const siteContent = {
   navbar: {
-    tagline: 'Independent reading platform',
+    tagline: 'Classifieds & gallery in one place',
   },
   footer: {
-    tagline: 'Stories, resources, and discoverable posts',
+    tagline: 'Local deals and visual posts',
   },
   hero: {
-    badge: 'Latest stories and visuals',
-    title: ['A thoughtful home for', 'stories, visuals, and discovery.'],
+    badge: 'Fresh listings & shots',
+    title: ['Find what you need,', 'then get lost in the gallery.'],
     description:
-      'Explore fresh articles, image-led posts, and discoverable content across the platform through a calmer and clearer browsing experience.',
+      'Scan price-forward classifieds for gear, housing, and services, then browse a clean image feed when you want inspiration instead of noise.',
     primaryCta: {
-      label: 'Read latest stories',
-      href: '/articles',
+      label: 'Browse classifieds',
+      href: '/classifieds',
     },
     secondaryCta: {
-      label: 'Explore visuals',
+      label: 'Open gallery',
       href: '/images',
     },
-    searchPlaceholder: 'Search stories, visuals, listings, and more',
+    searchPlaceholder: 'Search deals, gallery posts, and categories',
     focusLabel: 'Focus',
     featureCardBadge: 'latest cover rotation',
-    featureCardTitle: 'Latest posts shape the visual identity of the homepage.',
+    featureCardTitle: 'New posts keep the homepage feeling alive and specific to this community.',
     featureCardDescription:
-      'Recent images and stories stay at the center of the experience without changing any core platform behavior.',
+      'Classifieds stay scannable while gallery tiles stay large—same platform behavior, calmer presentation.',
   },
   home: {
     metadata: {
-      title: 'Stories, visuals, and discoverable content',
+      title: 'Classifieds and gallery for your community',
       description:
-        'Explore articles, images, listings, and curated posts through a cleaner reading-first experience.',
-      openGraphTitle: 'Stories, visuals, and discoverable content',
+        'Post and browse local deals alongside a dedicated image-sharing lane—built for quick scanning and strong visuals.',
+      openGraphTitle: 'Classifieds and gallery for your community',
       openGraphDescription:
-        'Discover articles, visual posts, and connected content through a calmer reading-first experience.',
-      keywords: ['story platform', 'article site', 'visual content', 'content discovery'],
+        'Discover nearby offers and scroll a media-first gallery without unrelated content types cluttering the path.',
+      keywords: ['classifieds', 'gallery', 'local deals', 'image sharing', 'marketplace'],
     },
-    introBadge: 'About the platform',
-    introTitle: 'Built for reading, browsing, and connecting different kinds of content.',
+    introBadge: 'How it works',
+    introTitle: 'Two focused lanes: deals you can act on, and images worth saving.',
     introParagraphs: [
-      'This site brings together article-style reading, visual browsing, and structured discovery so visitors can move naturally between different content types.',
-      'Instead of separating stories, visuals, and supporting resources into disconnected surfaces, the platform keeps them connected in one place with consistent navigation and easier exploration.',
-      'Whether someone starts with a story, an image-led post, a listing, or a resource page, they can keep discovering related content without friction.',
+      'This surface keeps classified posts tight on price, location, and urgency while the gallery lane lets photography and visual stories breathe.',
+      'Navigation stays minimal on purpose—only the formats this community actually uses—so discovery feels faster and less like a generic portal.',
+      'Whether someone lands from search or a shared link, they always know which lane they are in and what to do next.',
     ],
     sideBadge: 'At a glance',
     sidePoints: [
-      'Reading-first homepage with stronger emphasis on stories and imagery.',
-      'Connected sections for articles, visuals, listings, and supporting resources.',
-      'Cleaner browsing rhythm designed to make exploration feel easier.',
-      'Lightweight interactions that keep the experience fast and readable.',
+      'Directory-style scanning for classified posts with bold metadata.',
+      'Gallery-forward layout for image posts with immersive thumbnails.',
+      'Forest green system with crisp contrast for indoor and outdoor reading.',
+      'Lightweight motion so pages stay fast on mobile networks.',
     ],
     primaryLink: {
-      label: 'Browse articles',
-      href: '/articles',
+      label: 'Browse classifieds',
+      href: '/classifieds',
     },
     secondaryLink: {
-      label: 'See visuals',
+      label: 'View gallery',
       href: '/images',
     },
   },
   cta: {
-    badge: 'Start exploring',
-    title: 'Explore articles, visuals, and resources through one connected experience.',
+    badge: 'Ready when you are',
+    title: 'Post a deal or upload a shot in minutes.',
     description:
-      'Move between articles, image-led posts, listings, and resources through one clearer and more connected visual system.',
+      'Use the same account for classified publishing and gallery uploads—clear forms, obvious next steps, no mystery flows.',
     primaryCta: {
-      label: 'Get Started Free',
+      label: 'Create a free post',
       href: '/register',
     },
     secondaryCta: {
-      label: 'Contact Sales',
+      label: 'Talk to us',
       href: '/contact',
     },
   },
@@ -143,26 +143,24 @@ export const taskIntroCopy: Record<
     title: 'Classifieds, offers, and timely updates',
     paragraphs: [
       'Classified posts help surface offers, notices, deals, and time-sensitive opportunities in a faster-scanning format.',
-      'They work well alongside articles, listings, and profiles, making it easier to connect short-term posts with more structured content.',
-      'Browse by category to find announcements quickly, then continue into related sections when you need more detail.',
+      'They sit next to the gallery lane so shoppers can jump into visual inspiration when they want a break from comparing prices.',
+      'Browse by category to find announcements quickly, then open the gallery when you are ready for a slower, more visual pass.',
     ],
     links: [
-      { label: 'Business listings', href: '/listings' },
-      { label: 'Read articles', href: '/articles' },
-      { label: 'View profiles', href: '/profile' },
+      { label: 'Open gallery', href: '/images' },
+      { label: 'Search everything', href: '/search' },
     ],
   },
   image: {
     title: 'Image-led posts and visual stories',
     paragraphs: [
       'Images take the lead in this section through galleries, visual posts, and story-led content where imagery carries the experience.',
-      'These posts connect with articles, listings, and other sections so visuals can act as entry points into deeper content.',
-      'Browse the latest visual updates, then continue into related stories or supporting pages for more context.',
+      'When you need to switch modes, classifieds stay one tap away so practical deals and expressive media never feel disconnected.',
+      'Browse the latest visual updates, then hop back to offers whenever you are ready to compare options again.',
     ],
     links: [
-      { label: 'Read articles', href: '/articles' },
-      { label: 'Explore listings', href: '/listings' },
-      { label: 'Open classifieds', href: '/classifieds' },
+      { label: 'Browse classifieds', href: '/classifieds' },
+      { label: 'Search posts', href: '/search' },
     ],
   },
   profile: {

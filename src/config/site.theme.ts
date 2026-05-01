@@ -1,15 +1,15 @@
 import { defineSiteTheme } from '@/config/site.theme.defaults'
 
 export const SITE_THEME = defineSiteTheme({
-  shell: 'directory',
+  shell: 'market',
   hero: {
-    variant: 'search-first',
-    eyebrow: 'Business discovery system',
+    variant: 'forest-market',
+    eyebrow: 'Classifieds + gallery discovery',
   },
   home: {
-    layout: 'directory-stack',
-    primaryTask: 'listing',
-    featuredTaskKeys: ['listing', 'profile', 'classified'],
+    layout: 'market-catalog',
+    primaryTask: 'classified',
+    featuredTaskKeys: ['classified', 'image'],
   },
   navigation: {
     variant: 'compact',
@@ -20,7 +20,7 @@ export const SITE_THEME = defineSiteTheme({
   cards: {
     listing: 'listing-elevated',
     article: 'editorial-feature',
-    image: 'studio-panel',
+    image: 'catalog-grid',
     profile: 'studio-panel',
     classified: 'catalog-grid',
     pdf: 'catalog-grid',

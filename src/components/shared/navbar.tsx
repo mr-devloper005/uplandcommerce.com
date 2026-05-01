@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, ChevronRight, Sparkles, MapPin, Plus } from 'lucide-react'
+import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, MapPin, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/lib/auth-context'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
@@ -85,6 +85,15 @@ const directoryPalette = {
     post: 'border border-[#d7deca] bg-white text-[#1f2617] hover:bg-[#eef2e4]',
     mobile: 'border-t border-[#d7deca] bg-[#f4f6ef]',
   },
+  'forest-board': {
+    shell: 'border-b border-[#c5ddd4] bg-[#f9faf9]/95 text-[#0f241f] shadow-[0_1px_0_rgba(26,60,52,0.06)] backdrop-blur-xl',
+    logo: 'rounded-2xl border border-[#c5ddd4] bg-white',
+    nav: 'text-[#3d5a52] hover:text-[#0f241f]',
+    search: 'border border-[#c5ddd4] bg-white text-[#3d5a52]',
+    cta: 'bg-[#1B4332] text-white hover:bg-[#2d5a47]',
+    post: 'border border-[#c5ddd4] bg-white text-[#1B4332] hover:bg-[#e8f2ed]',
+    mobile: 'border-t border-[#c5ddd4] bg-[#f6faf8]',
+  },
 } as const
 
 export function Navbar() {
@@ -104,11 +113,12 @@ export function Navbar() {
     href: task.route,
     icon: taskIcons[task.key] || LayoutGrid,
   }))
-  const primaryTask = SITE_CONFIG.tasks.find((task) => task.key === recipe.primaryTask && task.enabled) || primaryNavigation[0]
   const isDirectoryProduct = recipe.homeLayout === 'listing-home' || recipe.homeLayout === 'classified-home'
 
   if (isDirectoryProduct) {
-    const palette = directoryPalette[(recipe.brandPack === 'market-utility' ? 'market-utility' : 'directory-clean') as keyof typeof directoryPalette]
+    const paletteKey =
+      recipe.brandPack === 'market-utility' ? 'market-utility' : recipe.brandPack === 'studio-dark' ? 'forest-board' : 'directory-clean'
+    const palette = directoryPalette[paletteKey]
 
     return (
       <header className={cn('sticky top-0 z-50 w-full', palette.shell)}>
@@ -137,24 +147,17 @@ export function Navbar() {
           </div>
 
           <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
-            <div className={cn('flex w-full max-w-xl items-center gap-3 rounded-full px-4 py-3', palette.search)}>
-              <Search className="h-4 w-4" />
-              <span className="text-sm">Find businesses, spaces, and local services</span>
+            <Link href="/search" className={cn('flex w-full max-w-xl items-center gap-3 rounded-full px-4 py-2 transition-colors hover:opacity-95', palette.search)}>
+              <Search className="h-4 w-4 shrink-0" />
+              <span className="text-sm">Search </span>
               <div className="ml-auto hidden items-center gap-1 text-xs opacity-75 md:flex">
                 <MapPin className="h-3.5 w-3.5" />
-                Local discovery
+              
               </div>
-            </div>
+            </Link>
           </div>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            {primaryTask ? (
-              <Link href={primaryTask.route} className="hidden items-center gap-2 rounded-full border border-current/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] opacity-75 md:inline-flex">
-                <Sparkles className="h-3.5 w-3.5" />
-                {primaryTask.label}
-              </Link>
-            ) : null}
-
             {isAuthenticated ? (
               <NavbarAuthControls />
             ) : (
@@ -163,9 +166,9 @@ export function Navbar() {
                   <Link href="/login">Sign In</Link>
                 </Button>
                 <Button size="sm" asChild className={cn('rounded-full', palette.cta)}>
-                  <Link href="/register">
+                  <Link href="/create/classified">
                     <Plus className="mr-1 h-4 w-4" />
-                    Add Listing
+                    Post an ad
                   </Link>
                 </Button>
               </div>
@@ -180,10 +183,10 @@ export function Navbar() {
         {isMobileMenuOpen && (
           <div className={palette.mobile}>
             <div className="space-y-2 px-4 py-4">
-              <div className={cn('mb-3 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium', palette.search)}>
+              <Link href="/search" onClick={() => setIsMobileMenuOpen(false)} className={cn('mb-3 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium', palette.search)}>
                 <Search className="h-4 w-4" />
-                Find businesses, spaces, and services
-              </div>
+                {'Search classifieds & gallery'}
+              </Link>
               {mobileNavigation.map((item) => {
                 const isActive = pathname.startsWith(item.href)
                 return (
@@ -273,13 +276,6 @@ export function Navbar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          {primaryTask && (recipe.navbar === 'utility-bar' || recipe.navbar === 'floating-bar') ? (
-            <Link href={primaryTask.route} className="hidden items-center gap-2 rounded-full border border-current/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] opacity-80 md:inline-flex">
-              <Sparkles className="h-3.5 w-3.5" />
-              {primaryTask.label}
-            </Link>
-          ) : null}
-
           <Button variant="ghost" size="icon" asChild className="hidden rounded-full md:flex">
             <Link href="/search">
               <Search className="h-5 w-5" />
@@ -305,16 +301,6 @@ export function Navbar() {
           </Button>
         </div>
       </nav>
-
-      {isFloating && primaryTask ? (
-        <div className="mx-auto hidden max-w-7xl px-4 pb-3 sm:px-6 lg:block lg:px-8">
-          <Link href={primaryTask.route} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200 backdrop-blur hover:bg-white/12">
-            Featured surface
-            <span>{primaryTask.label}</span>
-            <ChevronRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      ) : null}
 
       {isMobileMenuOpen && (
         <div className={style.mobile}>

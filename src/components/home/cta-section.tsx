@@ -7,12 +7,12 @@ export function CTASection() {
   return (
     <section className="pb-24 pt-12 sm:pb-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] border border-[rgba(110,26,55,0.14)] bg-[linear-gradient(135deg,rgba(110,26,55,0.98),rgba(63,18,31,0.98)_55%,rgba(114,186,169,0.9)_160%)] p-8 text-white shadow-[0_30px_90px_rgba(66,24,34,0.22)] sm:p-12 lg:p-16">
-          <div className="absolute inset-0 opacity-[0.16]" style={{ backgroundImage: 'linear-gradient(120deg, rgba(255,255,255,0.16) 0, transparent 26%, transparent 74%, rgba(255,255,255,0.1) 100%)' }} />
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/12 bg-[linear-gradient(135deg,#1B4332_0%,#0f241f_48%,#14332c_100%)] p-8 text-white shadow-[0_30px_90px_rgba(8,24,20,0.35)] sm:p-12 lg:p-16">
+          <div className="absolute inset-0 opacity-[0.18]" style={{ backgroundImage: 'linear-gradient(120deg, rgba(94,233,176,0.2) 0, transparent 30%, transparent 70%, rgba(255,255,255,0.08) 100%)' }} />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-white/88">
-              <Sparkles className="h-4 w-4 text-[#D5E7B5]" />
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/14 bg-white/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-50/90">
+              <Sparkles className="h-4 w-4 text-[#5ee9b0]" />
               {siteContent.cta.badge}
             </div>
 
@@ -20,12 +20,12 @@ export function CTASection() {
               {siteContent.cta.title}
             </h2>
 
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-emerald-50/82 sm:text-lg">
               {siteContent.cta.description}
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button size="lg" asChild className="h-12 rounded-full bg-[#D5E7B5] px-7 text-sm font-semibold text-[#24161b] hover:bg-[#c5db9b]">
+              <Button size="lg" asChild className="h-12 rounded-full bg-[#5ee9b0] px-7 text-sm font-semibold text-[#0a1f1a] hover:bg-[#4ad9a0]">
                 <Link href={siteContent.cta.primaryCta.href}>
                   {siteContent.cta.primaryCta.label}
                   <ArrowRight className="ml-2 h-4 w-4" />

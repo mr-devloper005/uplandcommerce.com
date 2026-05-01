@@ -25,7 +25,7 @@ export const siteTaskDefinitions = [
   },
   {
     key: 'image',
-    label: 'Images',
+    label: 'Gallery',
     route: '/images',
     description: 'Galleries and media-first posts.',
     contentType: 'image',
