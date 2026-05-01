@@ -48,6 +48,19 @@ export default function ContactPage() {
     return <ContactPageOverride />
   }
 
+  const rawEmails =
+    process.env.CONTACT_EMAILS ||
+    process.env.CONTACT_EMAIL ||
+    process.env.NEXT_PUBLIC_CONTACT_EMAILS ||
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
+    ''
+  const fallbackEmailDomain = process.env.NEXT_PUBLIC_SITE_DOMAIN?.trim() || ''
+  const fallbackEmail = fallbackEmailDomain ? `support@${fallbackEmailDomain}` : ''
+  const contactEmails = (rawEmails || fallbackEmail)
+    .split(/[,;\n]/g)
+    .map((value) => value.trim())
+    .filter(Boolean)
+
   const { recipe } = getFactoryState()
   const productKind = getProductKind(recipe)
   const tone = getTone(productKind)
@@ -98,6 +111,25 @@ export default function ContactPage() {
 
           <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
             <h2 className="text-2xl font-semibold">Send a message</h2>
+            {contactEmails.length ? (
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <a
+                  href={`mailto:${contactEmails[0]}`}
+                  className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold ${tone.action}`}
+                >
+                  Email us
+                </a>
+                {contactEmails.slice(0, 3).map((email) => (
+                  <a
+                    key={email}
+                    href={`mailto:${email}`}
+                    className="inline-flex h-11 items-center justify-center rounded-full border border-current/15 bg-white/0 px-5 text-sm font-semibold"
+                  >
+                    {email}
+                  </a>
+                ))}
+              </div>
+            ) : null}
             <form className="mt-6 grid gap-4">
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Your name" />
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
