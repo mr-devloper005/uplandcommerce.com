@@ -2,14 +2,14 @@ import type { TaskKey } from '@/lib/site-config'
 
 export const siteContent = {
   navbar: {
-    tagline: 'Classifieds & gallery in one place',
+    tagline: '',
   },
   footer: {
     tagline: 'Local deals and visual posts',
   },
   hero: {
     badge: 'Fresh listings & shots',
-    title: ['Find what you need,', 'then get lost in the gallery.'],
+    title: ['Upland Commerce classifieds,', 'local deals, and gallery.'],
     description:
       'Scan price-forward classifieds for gear, housing, and services, then browse a clean image feed when you want inspiration instead of noise.',
     primaryCta: {

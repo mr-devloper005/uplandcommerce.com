@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FileText, Building2, LayoutGrid, Tag, Github, Twitter, Linkedin, Image as ImageIcon, User, ArrowRight, Sparkles } from 'lucide-react'
+import { FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, User, ArrowRight, Sparkles } from 'lucide-react'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { siteContent } from '@/config/site.content'
 import { getFactoryState } from '@/design/factory/get-factory-state'
@@ -35,7 +35,6 @@ const footerLinks = {
     { name: 'Help Center', href: '/help' },
     { name: 'Community', href: '/community' },
     { name: 'Developers', href: '/developers' },
-    { name: 'Status', href: '/status' },
   ],
   legal: [
     { name: 'Privacy', href: '/privacy' },
@@ -44,12 +43,6 @@ const footerLinks = {
     { name: 'Licenses', href: '/licenses' },
   ],
 }
-
-const socialLinks = [
-  { name: 'Twitter', href: '/', icon: Twitter },
-  { name: 'GitHub', href: '/', icon: Github },
-  { name: 'LinkedIn', href: '/', icon: Linkedin },
-]
 
 export function Footer() {
   if (FOOTER_OVERRIDE_ENABLED) {
@@ -103,7 +96,7 @@ export function Footer() {
                 </Link>
               ) : null}
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-2">
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100/65">Browse</h3>
                 <ul className="mt-4 space-y-3 text-sm text-emerald-50/90">
@@ -119,16 +112,6 @@ export function Footer() {
                     <li key={item.name}><Link href={item.href} className="hover:text-white">{item.name}</Link></li>
                   ))}
                 </ul>
-              </div>
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100/65">Connect</h3>
-                <div className="mt-4 flex gap-3">
-                  {socialLinks.map((item) => (
-                    <Link key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/12 bg-white/8 p-2.5 text-emerald-50/90 hover:bg-white/14 hover:text-white">
-                      <item.icon className="h-4 w-4" />
-                    </Link>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
