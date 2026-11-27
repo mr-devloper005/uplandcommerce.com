@@ -1,7 +1,7 @@
 import { ContentImage } from "@/components/shared/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, Globe, Phone, Tag, Mail, CalendarDays } from "lucide-react";
+import { MapPin, Globe, Phone, Tag, Mail } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
 import { Footer } from "@/components/shared/footer";
 import { TaskPostCard } from "@/components/shared/task-post-card";
@@ -156,20 +156,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
     (typeof content.author === "string" && content.author.trim()) ||
     post.authorName ||
     "Editorial Team";
-  const articleDate = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "";
-  const publishedLabel = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "";
   const postTags = Array.isArray(post.tags) ? post.tags.filter((tag) => typeof tag === "string") : [];
   const location = content.address || content.location;
   const images = getImageUrls(post, content);
@@ -281,7 +267,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                 </h1>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                   <span>By {articleAuthor}</span>
-                  {articleDate ? <span>{articleDate}</span> : null}
                   <Badge variant="secondary" className="inline-flex items-center gap-1">
                     <Tag className="h-3.5 w-3.5" />
                     {category}
@@ -328,12 +313,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                           {post.title}
                         </h1>
                         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[#d6e0f4]">
-                          {publishedLabel ? (
-                            <span className="inline-flex items-center gap-1">
-                              <CalendarDays className="h-4 w-4" />
-                              {publishedLabel}
-                            </span>
-                          ) : null}
                           {location ? (
                             <span className="inline-flex items-center gap-1">
                               <MapPin className="h-4 w-4" />
@@ -418,12 +397,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                             <Tag className="h-3.5 w-3.5" />
                             {category}
                           </Badge>
-                          {publishedLabel ? (
-                            <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
-                              <CalendarDays className="h-4 w-4" />
-                              {publishedLabel}
-                            </span>
-                          ) : null}
                           {location ? (
                             <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                               <MapPin className="h-4 w-4" />
